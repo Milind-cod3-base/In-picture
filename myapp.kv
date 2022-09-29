@@ -1,0 +1,123 @@
+#:import get_color_from_hex kivy.utils.get_color_from_hex
+ScreenManager:
+    MainScreen:
+    ResultDisp:
+
+<MainScreen>:
+    name:'main'
+    ScrollView:
+        #do_scroll_x: True
+        do_scroll_y: True
+        MDFloatLayout:
+            md_bg_color: rgba(0,0,45,255)
+            size_hint_y: None
+            pos_hint: {"center_x":0.5,"center_y":0.5}
+            height: dp(800)
+            width: dp(800)
+            MDCard: #card to hold components
+                orientation: "vertical"
+                padding: "10dp"
+                spacing: "5dp"
+                pos_hint: {"center_x":0.5,"center_y":0.9}
+                md_bg_color: rgba(200,200,210,255)
+                radius:(20,20,20,20)
+                size_hint: 0.9,0.10
+                elevation: 6
+                MDTextField:
+                    hint_text: "Accuracy in %"
+                    line_color_focus: rgba(0,0,45,255)
+                    size_hint_x: None
+                    width: 50
+                    font_size: 20
+                    pos_hint: {"center_x":.35}
+            MDCard: #card to hold components
+                orientation: "vertical"
+                padding: "10dp"
+                spacing: "5dp"
+                pos_hint: {"center_x":0.5,"center_y":0.68}
+                md_bg_color: rgba(200,200,210,255)
+                radius:(20,20,20,20)
+                size_hint: 0.9,0.30
+                elevation: 6
+                MDRoundFlatIconButton: #cross referencing the user credentionals
+                    text: 'Upload Main Image'
+                    text_color: rgba(0,0,45,255)
+                    icon: "image-move"
+                    theme_icon_color: "Custom"
+                    icon_color: rgba(0,0,45,255)
+                    pos_hint: {"center_x":.5,"center_y":0.6}
+                    font_size: 18
+                    line_color: rgba(0,0,45,255)
+                    on_release:
+                        root.manager.transition.direction= "left"
+            MDCard: #card to hold components
+                orientation: "vertical"
+                padding: "10dp"
+                spacing: "5dp"
+                pos_hint: {"center_x":0.5,"center_y":0.41}
+                md_bg_color: rgba(200,200,210,255)
+                radius:(20,20,20,20)
+                size_hint: 0.9,0.2
+                elevation: 6
+                MDRoundFlatIconButton: #cross referencing the user credentionals
+                    text: 'Upload Temp Image'
+                    text_color: rgba(0,0,45,255)
+                    icon: "image-move"
+                    theme_icon_color: "Custom"
+                    icon_color: rgba(0,0,45,255)
+                    pos_hint: {"center_x":.5,"center_y":0.26}
+                    font_size: 18
+                    line_color: rgba(0,0,45,255)
+                    on_release:
+                        root.manager.transition.direction= "left"
+            MDRoundFlatButton: #cross referencing the user credentionals
+                text: 'Find'
+                text_color: rgba(200,200,210,255)
+                pos_hint: {"center_x":.7,"center_y":0.26}
+                font_size: 18
+                line_color: rgba(200,200,210,255)
+                on_release:
+                    root.manager.current = 'result'
+                    root.manager.transition.direction= "left"
+            MDRoundFlatButton: #cross referencing the user credentionals
+                text: 'Clear All'
+                text_color: rgba(200,200,210,255)
+                pos_hint: {"center_x":.3,"center_y":0.26}
+                font_size: 18
+                line_color: rgba(200,200,210,255)
+                on_release:
+                    root.manager.transition.direction= "left"
+<ResultDisp>:
+    name:'result'
+    MDGridLayout:
+        cols: 1
+        orientation: "tb-lr"
+        size_hint_y: None
+        md_bg_color: rgba(0,0,45,255)
+        pos_hint: {"center_x": 0.45, "center_y": 0.95}
+        height: self.minimum_height
+        padding: "4dp"
+        spacing: "5dp"
+        MDIconButton:
+            icon: "arrow-left"
+            pos_hint:{"center_x":0.1,"center_y":0.1}
+            user_font_size: "30sp"
+            theme_text_color: "Custom"
+            text_color:rgba(200,200,210,255)
+            on_press:
+                root.manager.current = 'main'
+                root.manager.transition.direction = 'right'
+    MDFloatLayout:
+        padding : 2
+        spacing : 2
+        orientation : "vertical"
+        md_bg_color: rgba(0,0,45,255)
+        MDCard: #card to hold components
+            orientation: "vertical"
+            padding: "10dp"
+            spacing: "5dp"
+            pos_hint: {"center_x":0.5,"center_y":0.5}
+            md_bg_color: rgba(200,200,210,255)
+            radius:(20,20,20,20)
+            size_hint: 0.8,0.8
+            elevation: 6
