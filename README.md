@@ -23,4 +23,4 @@
         2. Numpy
 
     UI:
-        1. KivyMD
+        1. KivyMD"# Object-detection-app-using-an-AI-model-" 

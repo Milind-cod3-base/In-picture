@@ -1,0 +1,149 @@
+#:import get_color_from_hex kivy.utils.get_color_from_hex
+ScreenManager:
+    FirstScreen:
+    MainScreen:
+    ResultDisp:
+<FirstScreen>:
+    name: 'first'
+
+    ScreenWallpaper:
+        size :320,500
+        AsyncImage:
+            allow_stretch: True
+            keep_ratio:False
+            source:'https://cutewallpaper.org/21/simple-mac-wallpaper/1920x1200-Simple-pink-desktop-PC-and-Mac-wallpaper.jpg'
+    MDLabel:
+        text:'App name'
+        font_style: 'Button'
+        font_size: 50
+        halign: "center"
+        size_hint_y: None
+        pos_hint: {"center_x":.5,"center_y":.8}
+        padding_y: 10        
+        opposite_colors:True
+        text_color:self.specific_text_color
+        theme_text_color:"Custom"
+    MDRoundFlatButton: #cross referencing the user credentionals
+        text: 'Start'
+        theme_icon_color: "Custom"
+        text_color: rgba(0,0,45,255)
+        icon_color: rgba(0,0,45,255)
+        pos_hint: {"center_x":.5,"center_y":0.1}
+        font_size: 18
+        line_color: rgba(0,0,45,255)
+        on_release:
+            root.manager.current = 'main'
+            root.manager.transition.direction= 'left'
+            
+<MainScreen>:
+    name:'main'
+    mainImage: mainImage
+    tempImage: tempImage
+
+
+    ScreenWallpaper:
+        size :320,500
+        AsyncImage:
+            allow_stretch: True
+            keep_ratio:False
+            source:'https://cutewallpaper.org/21/simple-mac-wallpaper/1920x1200-Simple-pink-desktop-PC-and-Mac-wallpaper.jpg'
+    MDRoundFlatIconButton: #cross referencing the user credentionals
+        id: mainImage
+        text: 'Upload Main Image'
+        text_color: rgba(0,0,45,255)
+        icon: "image-move"
+        theme_icon_color: "Custom"
+        icon_color: rgba(0,0,45,255)
+        pos_hint: {"center_x":.18,"center_y":0.25}
+        font_size: 18
+        line_color: rgba(0,0,45,255)
+        on_release:
+            root.manager.transition.direction= "left"
+            root.open_file_manager_main()
+    Image:
+        id:image1
+        source: 'photo.png'
+        pos_hint: {'center_x': .2, 'center_y': .55}
+        size_hint: None,None
+        size: 280,280
+
+    MDRoundFlatIconButton: #cross referencing the user credentionals
+        id: tempImage
+        text: 'Upload Temp Image'
+        text_color: rgba(0,0,45,255)
+        icon: "image-move"
+        theme_icon_color: "Custom"
+        icon_color: rgba(0,0,45,255)
+        pos_hint: {"center_x":.82,"center_y":0.25}
+        font_size: 18
+        line_color: rgba(0,0,45,255)
+        on_release:
+            root.manager.transition.direction= "left"
+            root.open_file_manager_template()
+    Image:
+        id:image2
+        source: 'photo.png'
+        pos_hint: {'center_x': .8, 'center_y': .55}
+        size_hint: None,None
+        size: 280,280
+    MDTextField:
+        id: accuracy
+        hint_text: "Accuracy in %"
+        line_color_focus: rgba(0,0,45,255)
+        size_hint_x: None
+        width: 60
+        font_size: 22
+        pos_hint: {'center_x': .45, 'center_y': .9}
+        # for now, storing accuracy whn pressed Enter
+        on_text_validate: root.store_accuracy()
+
+
+    MDRoundFlatButton: #cross referencing the user credentionals
+        text: 'Find'
+        theme_icon_color: "Custom"
+        text_color: rgba(0,0,45,255)
+        icon_color: rgba(0,0,45,255)
+        pos_hint: {"center_x":.5,"center_y":0.1}
+        font_size: 18
+        line_color: rgba(0,0,45,255)
+        on_release:
+            root.dispObj()
+            root.manager.current = 'result'
+            root.manager.transition.direction= "left"
+
+<ResultDisp>:
+    name:'result'
+    result: result
+    
+    ScreenWallpaper:
+        size :320,500
+        AsyncImage:
+            allow_stretch: True
+            keep_ratio:False
+            source:'https://cutewallpaper.org/21/simple-mac-wallpaper/1920x1200-Simple-pink-desktop-PC-and-Mac-wallpaper.jpg'
+
+    MDIconButton:
+        icon: "arrow-left"
+        pos_hint:{"center_x":0.05,"center_y":0.95}
+        user_font_size: "45sp"
+        theme_text_color: "Custom"
+        #text_color:rgba(200,200,210,255)
+        on_press:
+            root.manager.current = 'main'
+            root.manager.transition.direction = 'right'
+    MDFloatLayout:
+        padding : 2
+        spacing : 2
+        orientation : "vertical"
+        MDCard: #card to hold components
+            id: result
+            orientation: "vertical"
+            padding: "10dp"
+            spacing: "5dp"
+            pos_hint: {"center_x":0.5,"center_y":0.5}
+            md_bg_color: rgba(200,200,210,255)
+            radius:(20,20,20,20)
+            size_hint: 0.8,0.8
+            elevation: 6
+            #on_enter: 'real.jpg'
+            #Image: 'output.jpg'
