@@ -25,6 +25,12 @@ import tempData
 
 # OR? can we open the uploaded image directly 
 
+class FirstScreen(Screen):
+    pass
+
+class ScreenWallpaper(Screen):
+    pass
+
 class MainScreen(Screen, MDApp):
 
     def __init__(self, **kw):
@@ -63,13 +69,13 @@ class MainScreen(Screen, MDApp):
         
     def open_file_manager_main(self):
         # opening file manager
-        #self.file_manager_obj_main.show('/')
-        self.file_manager_obj_main.show("E:\\")
+        self.file_manager_obj_main.show('/')
+        #self.file_manager_obj_main.show("E:\\")
     
     def open_file_manager_template(self):
         # opening file manager
-        #self.file_manager_obj_template.show('/')
-        self.file_manager_obj_template.show('E:\\')
+        self.file_manager_obj_template.show('/')
+        #self.file_manager_obj_template.show('E:\\')
     
     
     # method to close file manager
@@ -108,13 +114,13 @@ class MainScreen(Screen, MDApp):
         # setting the threshold (matching accuracy)
         # for now this value is manually set
         # later on it will be read by an object from frontend
-        #threshold = 0.90
+        threshold = 0.90
 
         # reading threshold from the text input
 
 
         # str is stored in the text file. 
-        threshold = float(tempData.readAccuracy())/100
+        #threshold = float(tempData.readAccuracy())/100
 
         #threshold = self.root.get_screen('main').ids.accuracy.text
 
@@ -160,7 +166,8 @@ class ResultDisp(Screen):
 sm = ScreenManager()
 
 screens = [MainScreen(name= "main"),
-            ResultDisp(name= "result")]
+            ResultDisp(name= "result"),
+            FirstScreen(name= "first")]
 
 for i in screens:
     sm.add_widget(i)
@@ -174,7 +181,7 @@ class MyApp(MDApp):
     def build(self):
         self.theme_cls.theme_style = "Light"
         # loading my.kv file    # going to screenmanager
-        return  Builder.load_file("myapp.kv") 
+        return  Builder.load_file("myapp27.kv") 
     
 
 
