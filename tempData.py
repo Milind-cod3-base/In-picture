@@ -13,7 +13,7 @@ def storeAccuracy(accuracy):
 # function to read the name of temporary accuracy from the file accuracy.txt
 def readAccuracy():
     with open("accuracy.txt","r") as file:
-        return file.read()
+        return float(file.read())
 
 #print(type(readAccuracy()))
 
@@ -32,3 +32,5 @@ def saveTemplate(path):
 def readTemplate():
     with open("templateImage.txt","r") as file:
         return file.read()
+
+
