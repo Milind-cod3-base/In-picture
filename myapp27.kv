@@ -60,12 +60,12 @@ ScreenManager:
         on_release:
             root.manager.transition.direction= "left"
             root.open_file_manager_main()
-    Image:
-        id:image1
-        source: 'photo.png'
-        pos_hint: {'center_x': .2, 'center_y': .55}
-        size_hint: None,None
-        size: 280,280
+    # Image:
+    #     id:image1
+    #     source: root.mainImage()
+    #     pos_hint: {'center_x': .2, 'center_y': .55}
+    #     size_hint: None,None
+    #     size: 280,280
 
     MDRoundFlatIconButton: #cross referencing the user credentionals
         id: tempImage
@@ -80,12 +80,12 @@ ScreenManager:
         on_release:
             root.manager.transition.direction= "left"
             root.open_file_manager_template()
-    Image:
-        id:image2
-        source: 'photo.png'
-        pos_hint: {'center_x': .8, 'center_y': .55}
-        size_hint: None,None
-        size: 280,280
+    # Image:
+    #     id:image2
+    #     source: 'photo.png'
+    #     pos_hint: {'center_x': .8, 'center_y': .55}
+    #     size_hint: None,None
+    #     size: 280,280
     MDTextField:
         id: accuracy
         hint_text: "Accuracy in %"
@@ -131,6 +131,7 @@ ScreenManager:
         on_press:
             root.manager.current = 'main'
             root.manager.transition.direction = 'right'
+            
     MDFloatLayout:
         padding : 2
         spacing : 2
