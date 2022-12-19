@@ -77,6 +77,8 @@ class MainScreen(Screen, MDApp):
         self.file_manager_obj_template.show('/')
         #self.file_manager_obj_template.show('E:\\')
     
+
+    
     
     # method to close file manager
     def exit_manager_main(self):
@@ -114,13 +116,13 @@ class MainScreen(Screen, MDApp):
         # setting the threshold (matching accuracy)
         # for now this value is manually set
         # later on it will be read by an object from frontend
-        threshold = 0.90
+        #threshold = 0.90
 
         # reading threshold from the text input
 
 
         # str is stored in the text file. 
-        #threshold = float(tempData.readAccuracy())/100
+        threshold = (tempData.readAccuracy())/100
 
         #threshold = self.root.get_screen('main').ids.accuracy.text
 
@@ -160,6 +162,8 @@ class ResultDisp(Screen):
     def on_enter(self):
         self.output = Image(source='output.jpg')
         self.ids.result.add_widget(self.output)
+
+    
     
     
 
