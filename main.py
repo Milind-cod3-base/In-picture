@@ -25,6 +25,10 @@ import tempData
 
 # OR? can we open the uploaded image directly 
 
+main_image_path = ""
+template_image_path = ""
+accuracy = 50
+
 class FirstScreen(Screen):
     pass
 
