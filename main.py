@@ -5,13 +5,21 @@ import numpy as np
 from kivy.lang import Builder
 from kivymd.app import MDApp
 
+from kivy.core.window import Window
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivymd.uix.filemanager import MDFileManager
 from kivymd.uix.widget import Widget
 from kivy.uix.image import Image
+from kivy.uix.boxlayout import BoxLayout
+# from kivymd.uix.button import MDFlatButton
+# from kivymd.uix.dialog import MDDialog
 
-import tempData
 
+
+from plyer import filechooser
+
+
+Window.maximize()
 
 # function to rename the uploaded original image
 # takes in the uploaded image as input and renames
@@ -36,15 +44,19 @@ class ScreenWallpaper(Screen):
     pass
 
 class MainScreen(Screen, MDApp):
+    global main_image_path
+    global template_image_path
+    global accuracy
 
     def __init__(self, **kw):
         super().__init__(**kw)
+        self.manager_open = False
         self.file_manager_obj_main = MDFileManager(
             select_path= self.select_path_main ,   # method of which window will open first
             exit_manager= self.exit_manager_main, # method to exit the file manager
             preview=True
-
-        )
+            )
+        #self.path = ""
 
         self.file_manager_obj_template = MDFileManager(
             select_path= self.select_path_template ,   # method of which window will open first
@@ -55,31 +67,44 @@ class MainScreen(Screen, MDApp):
 
     # gets the path of the file
     def select_path_main(self, path):
-        
-        tempData.saveMain(path)
+        global main_image_path
+        #tempData.saveMain(path)
+        #self.path=path
         
         #print(path)
+        self.ids.image.source = path
+        main_image_path= path
         
         self.exit_manager_main()
 
+        #return main_image_path
+
     # gets the path of the file
     def select_path_template(self, path):
-        
-        tempData.saveTemplate(path)
+        global template_image_path
+        #tempData.saveTemplate(path)
         
         #print(path)
         
+        template_image_path= path
+        self.ids.image1.source = path
         self.exit_manager_template()
+
+        #return template_image_path
+
         
     def open_file_manager_main(self):
         # opening file manager
-        self.file_manager_obj_main.show('/')
-        #self.file_manager_obj_main.show("E:\\")
+        #self.file_manager_obj_main.show('/')
+        self.file_manager_obj_main.show("E:\In-picture\Test_images\Main_images")
+        self.manager_open = True
+        #E:\In-picture\main.py
     
     def open_file_manager_template(self):
         # opening file manager
-        self.file_manager_obj_template.show('/')
-        #self.file_manager_obj_template.show('E:\\')
+        #self.file_manager_obj_template.show('/')
+        self.file_manager_obj_template.show('E:\In-picture\Test_images\Template_images')
+        self.manager_open = True
     
 
     
@@ -92,22 +117,27 @@ class MainScreen(Screen, MDApp):
         self.file_manager_obj_template.close()
     
     def store_accuracy(self):
+        global accuracy
         # store this accuracy in external file
-        acc = self.ids["accuracy"].text
-        tempData.storeAccuracy(acc)
+        #accuracy = self.ids["accuracy"].text
+
+        accuracy = self.ids.progress_slider.value
+        #tempData.storeAccuracy(acc)
+        return accuracy
 
 
     # stores/writes/rewrites result into output.jpg
     def dispObj(self):
-        # read the original image
-        im_rgb = cv2.imread(tempData.readMain())
 
+        # read the original image
+        im_rgb = cv2.imread(main_image_path)
+        
         # convert the real image into Gray scale
         im_gray = cv2.cvtColor(im_rgb, cv2.COLOR_BGR2GRAY)
 
 
         # reading the template in gray scale mode
-        temp = cv2.imread(tempData.readTemplate(), 0)
+        temp = cv2.imread(template_image_path, 0)
 
         # reading the width and height
         # using -1 to invert the output as the 
@@ -126,7 +156,7 @@ class MainScreen(Screen, MDApp):
 
 
         # str is stored in the text file. 
-        threshold = (tempData.readAccuracy())/100
+        threshold = (accuracy)/100
 
         #threshold = self.root.get_screen('main').ids.accuracy.text
 
@@ -153,7 +183,9 @@ class MainScreen(Screen, MDApp):
         ims = cv2.resize(im_rgb, (480,480))
         #return cv2.imshow('Object found', ims)
         
+        
         cv2.imwrite('output.jpg', ims)
+        
         #return ims
         # # below code stops the python kernel from crashing
         # cv2.waitKey(0) 
@@ -161,35 +193,73 @@ class MainScreen(Screen, MDApp):
         # cv2.destroyAllWindows()
 
 
-class ResultDisp(Screen):
+    def dispResult(self):
+        self.ids.image2.source = 'output.jpg'
+        self.ids.image2.reload()
+        # shutil.copy("output.jpg","output1.jpg")
+        # self.ids.image2.source = "output1.jpg"
+        # os.remove('E:\In-picture\output1.jpg')
 
-    def on_enter(self):
-        self.output = Image(source='output.jpg')
-        self.ids.result.add_widget(self.output)
+    # def show_alert_dialog(self):
+    #     if not self.dialog:
+    #         self.dialog = MDDialog(
+    #             text="Discard draft?",
+    #             buttons=[
+    #                 MDFlatButton(
+    #                     text="CANCEL",
+    #                     theme_text_color="Custom",
+    #                     text_color=self.theme_cls.primary_color,
+    #                 ),
+    #                 MDFlatButton(
+    #                     text="DISCARD",
+    #                     theme_text_color="Custom",
+    #                     text_color=self.theme_cls.primary_color,
+    #                 ),
+    #             ],
+    #         )
+    #     self.dialog.open()
+        
+
+
+# class ResultDisp(Screen):
+#     pass
+
+#     def on_enter(self):
+#         self.output = Image(source='output.jpg')
+#         self.ids.result.add_widget(self.output)
 
     
     
     
 
-sm = ScreenManager()
+# sm = ScreenManager()
 
-screens = [MainScreen(name= "main"),
-            ResultDisp(name= "result"),
-            FirstScreen(name= "first")]
+# screens = [MainScreen(name= "main")
+#             #ResultDisp(name= "result"),
+#             #FirstScreen(name= "first")]
 
-for i in screens:
-    sm.add_widget(i)
+# for i in screens:
+#     sm.add_widget(i)
+
+class ScreenWallpaper(BoxLayout):
+    pass
+class WindowManager(ScreenManager):
+    pass
 
 
-class MyApp(MDApp): 
+class MainApp(MDApp): 
     
-
+    def __init__(self, **kwargs):
+        self.title = "In Picture by SHRESTH SHARMA(12201944), DHARMESH PATEL(12203573), MILIND MILIND(12200002), AAYUSH SURANA(12200044), JAYDIP BORAD(12203473)"
+        super().__init__(**kwargs)
 
 
     def build(self):
-        self.theme_cls.theme_style = "Light"
-        # loading my.kv file    # going to screenmanager
-        return  Builder.load_file("myapp27.kv") 
+        global sm
+        sm = ScreenManager()
+        sm.add_widget(MainScreen(name='main'))
+        return Builder.load_file("myappnew.kv") 
+ 
     
 
 
@@ -205,4 +275,5 @@ class MyApp(MDApp):
 
 # if its the main file, execute the following code
 if __name__ == "__main__":
-    MyApp().run()
+    MainApp().run()
+    
