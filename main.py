@@ -11,9 +11,11 @@ from kivymd.uix.filemanager import MDFileManager
 from kivymd.uix.widget import Widget
 from kivy.uix.image import Image
 from kivy.uix.boxlayout import BoxLayout
+from kivymd.uix.dialog import MDDialog
 # from kivymd.uix.button import MDFlatButton
 # from kivymd.uix.dialog import MDDialog
 
+import os
 
 
 from plyer import filechooser
@@ -96,14 +98,16 @@ class MainScreen(Screen, MDApp):
     def open_file_manager_main(self):
         # opening file manager
         #self.file_manager_obj_main.show('/')
-        self.file_manager_obj_main.show("E:\In-picture\Test_images\Main_images")
+        self.file_manager_obj_main.show("E:\In-picture\Test_images")
+        #self.file_manager_obj_main.show("*\Test_images")
         self.manager_open = True
         #E:\In-picture\main.py
     
     def open_file_manager_template(self):
         # opening file manager
         #self.file_manager_obj_template.show('/')
-        self.file_manager_obj_template.show('E:\In-picture\Test_images\Template_images')
+        self.file_manager_obj_template.show('E:\In-picture\Test_images')
+        
         self.manager_open = True
     
 
@@ -125,6 +129,8 @@ class MainScreen(Screen, MDApp):
         #tempData.storeAccuracy(acc)
         return accuracy
 
+    def dialog_callback(self, *args):
+        self.dialog.dismiss()
 
     # stores/writes/rewrites result into output.jpg
     def dispObj(self):
@@ -157,7 +163,7 @@ class MainScreen(Screen, MDApp):
 
         # str is stored in the text file. 
         threshold = (accuracy)/100
-
+        #threshold = accuracy
         #threshold = self.root.get_screen('main').ids.accuracy.text
 
         # locating pixels only above the threshold matching
@@ -169,28 +175,44 @@ class MainScreen(Screen, MDApp):
         # and drawing yellow boxes around them.
         
 
+        if loc[0].size == 0:
+            self.dialog = MDDialog(title="Error", 
+                     text="Template not found in the image", 
+                     size_hint=(0.8, 0.5))
 
-        # function to display the image containing object when needed
-        # to get the dimension of the box: we will use
-        # same dimensions of the template. We take a point
-        # and the box will be of the same width and height
-        # of that of the template.
-        # also making boxes inside the original images (in-place)
-        for pt in zip(*loc[::-1]):
-            cv2.rectangle(im_rgb, pt, (pt[0]+w, pt[1]+h), (0,255,255), 2)
+                     
+                     #events_callback = self.dialog.dismiss())
+            self.dialog.open()
+            #self.dialog.dismiss()
 
-        # resizing the output image according to the MDcard
-        ims = cv2.resize(im_rgb, (480,480))
-        #return cv2.imshow('Object found', ims)
-        
-        
-        cv2.imwrite('output.jpg', ims)
-        
-        #return ims
-        # # below code stops the python kernel from crashing
-        # cv2.waitKey(0) 
+        else:
 
-        # cv2.destroyAllWindows()
+
+
+            # function to display the image containing object when needed
+            # to get the dimension of the box: we will use
+            # same dimensions of the template. We take a point
+            # and the box will be of the same width and height
+            # of that of the template.
+            # also making boxes inside the original images (in-place)
+            for pt in zip(*loc[::-1]):
+                cv2.rectangle(im_rgb, pt, (pt[0]+w, pt[1]+h), (0,255,255), 2)
+
+            # resizing the output image according to the MDcard
+            ims = cv2.resize(im_rgb, (480,480))
+            #return cv2.imshow('Object found', ims)
+            
+            
+            cv2.imwrite('output.jpg', ims)
+            
+            #return ims
+            # # below code stops the python kernel from crashing
+            # cv2.waitKey(0) 
+
+            # cv2.destroyAllWindows()
+    # def dialog_callback(self, *args):
+    #     self.dialog.dismiss()
+
 
 
     def dispResult(self):
